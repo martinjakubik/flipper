@@ -1,0 +1,22 @@
+{
+  "name": "flook",
+  "version": "1.0.0",
+  "description": "flook flipper platform",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/martinjakubik/flipper.git"
+  },
+  "keywords": [
+    "cards"
+  ],
+  "author": "martinjakubik",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/martinjakubik/flipper/issues"
+  },
+  "homepage": "https://github.com/martinjakubik/flipper#readme"
+}
