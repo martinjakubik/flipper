@@ -1,6 +1,6 @@
 {
   "name": "flook",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "flook flipper platform",
   "main": "index.js",
   "scripts": {
@@ -18,5 +18,9 @@
   "bugs": {
     "url": "https://github.com/martinjakubik/flipper/issues"
   },
-  "homepage": "https://github.com/martinjakubik/flipper#readme"
+  "homepage": "https://github.com/martinjakubik/flipper#readme",
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-release": "^0.14.0"
+  }
 }
