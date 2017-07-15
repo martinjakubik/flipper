@@ -3,7 +3,7 @@ define('Player', ['Tools'], function (Tools) {
     'use strict';
 
     var cardFlipSound = new Audio('../resources/cardflip.wav');
-    var cardShwipSound = new Audio('../flook/resources/cardshwip.wav');
+    var cardShwipSound = new Audio('../js/lib/flook/resources/cardshwip.wav');
 
     var Player = function (nPlayerNum, oRemoteReference, nCardWidth, sSessionId) {
 
