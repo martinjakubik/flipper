@@ -251,6 +251,8 @@ define('Player', ['Tools'], function (Tools) {
             this.clearTable();
         }
 
+        cardShwipSound.play();
+
         // updates the remote reference for this player
         // TODO: optimize performance here; if we have two or more players, all
         // of whose cards are "won" by the present player, then we will update
