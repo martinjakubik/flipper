@@ -15,6 +15,8 @@ define('Player', ['Tools'], function (Tools) {
         this.name = '';
         this.hand = [];
         this.table = [];
+
+        this.fannedCards = false;
     };
 
     Player.prototype.getPlayerNum = function () {
@@ -339,7 +341,167 @@ define('Player', ['Tools'], function (Tools) {
      *
      */
     Player.prototype.addOnTapToTopCardInHand = function (fnOnTap) {
-        this.onTapTopCardInHand = fnOnTap;
+        this.onTapTopCardInHand = this.fanCards.bind(this);
+    };
+
+    /**
+    * gets index of the given card view
+    */
+    Player.prototype.getIndexOfCardViewInHand = function (oCardView) {
+        var i,
+            aCards = this.getHand(),
+            sCardId = oCardView.id,
+            sCardInCardsId;
+
+        for (i = 0; i < aCards.length; i++) {
+            sCardInCardsId = 'card' + aCards[i].value + '-' + aCards[i].suit;
+            if (sCardId === sCardInCardsId) {
+                return i;
+            }
+        }
+    };
+
+    /**
+    * unfans all cards
+    */
+    Player.prototype.unfanCards = function () {
+
+        // puts back first card
+        var oCard = this.getHand() ? this.getHand()[0] : null;
+        var sCardId = oCard.value + '-' + oCard.suit;
+        var oCardView = findCardViewForId(sCardId);
+
+        Tools.removeClass(oCardView, 'showFace');
+        Tools.removeClass(oCardView, 'stackedCard');
+        Tools.removeClass(oCardView, 'fannedCard');
+        Tools.addClass(oCardView, 'showBack');
+
+        // puts back first card
+        oCard = this.getHand() ? this.getHand()[this.getHand().length - 1] : null;
+        sCardId = oCard.value + '-' + oCard.suit;
+        oCardView = findCardViewForId(sCardId);
+
+        Tools.removeClass(oCardView, 'showFace');
+        Tools.removeClass(oCardView, 'stackedCard');
+        Tools.removeClass(oCardView, 'fannedCard');
+        Tools.addClass(oCardView, 'showBack');
+
+        var i;
+
+        // puts back rest of cards except last (they are stacked)
+        for (i = 1; i < this.getHand().length - 1; i++) {
+            oCard = this.getHand() ? this.getHand()[i] : null;
+            sCardId = oCard.value + '-' + oCard.suit;
+
+            if (oCard) {
+                oCardView = findCardViewForId(sCardId);
+
+                Tools.removeClass(oCardView, 'showFace');
+                Tools.removeClass(oCardView, 'fannedCard');
+                Tools.addClass(oCardView, 'stackedCard');
+                Tools.addClass(oCardView, 'showBack');
+            }
+        }
+        this.fannedCards = false;
+    };
+
+    /**
+    * fans out some cards
+    */
+    Player.prototype.fanCards = function (oEvent) {
+
+        if (!oEvent) {
+            return;
+        }
+
+        var i;
+
+        if (this.fannedCards === true) {
+            this.unfanCards();
+            return;
+        }
+
+        var oCardView = oEvent.currentTarget;
+
+        if (!oCardView) {
+            return;
+        }
+
+        this.fannedCards = true;
+
+        var nCardIndex = this.getIndexOfCardViewInHand(oCardView);
+
+        var oCard,
+            aCardIndexes = this.getNeighborCards(nCardIndex, this.getHand()),
+            j = 0,
+            sCardId;
+
+        for (i = 0; i < aCardIndexes.length; i++) {
+            j = aCardIndexes[i];
+            oCard = this.getHand() ? this.getHand()[j] : null;
+            sCardId = oCard.value + '-' + oCard.suit;
+
+            if (oCard) {
+                var oCardView = findCardViewForId(sCardId);
+
+                Tools.toggleClass(oCardView, 'fannedCard');
+                Tools.toggleClass(oCardView, 'stackedCard');
+                Tools.toggleClass(oCardView, 'showFace');
+                Tools.toggleClass(oCardView, 'showBack');
+            }
+        }
+    };
+
+    /**
+    * gets neighbor cards of a given card
+    *
+    * @return an array of the neighbor cards, centered on the given card
+    */
+    Player.prototype.getNeighborCards = function (nCardIndex, aCards) {
+        var nNeighborhoodSize = 5;
+        var aNeighborCardIndexes = [];
+        var nAddCardIndex = -1;
+        var i;
+
+        if (nCardIndex < 0 || !aCards || aCards.length < 1) {
+            return aNeighborCardIndexes;
+        }
+
+        var nHalfNeighborhoodSize = Math.floor(nNeighborhoodSize / 2);
+
+        if (nCardIndex === 0) {
+            i = 0;
+            while (i < aCards.length) {
+                aNeighborCardIndexes.push(i);
+                i++;
+                if (i > nHalfNeighborhoodSize) {
+                    break;
+                }
+            }
+            return aNeighborCardIndexes;
+        }
+
+        if (nCardIndex === aCards.length) {
+            i = aCards.length;
+            while (i > 0) {
+                aNeighborCardIndexes.push(i);
+                i--;
+                if (aCards.length - i > (nHalfNeighborhoodSize)) {
+                    break;
+                }
+            }
+            return aNeighborCardIndexes;
+        }
+
+        var nBegin = nCardIndex - nHalfNeighborhoodSize;
+        var nEnd = nCardIndex + nHalfNeighborhoodSize;
+
+        for (i = nBegin; i < nEnd ; i++) {
+            if (i > 0 && i < aCards.length) {
+                aNeighborCardIndexes.push(i);
+            }
+        }
+        return aNeighborCardIndexes;
     };
 
     return Player;
