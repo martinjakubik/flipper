@@ -5,12 +5,13 @@ define('Player', ['Tools'], function (Tools) {
     var cardFlipSound = new Audio('../resources/cardflip.wav');
     var cardShwipSound = new Audio('../js/lib/flook/resources/cardshwip.wav');
 
-    var Player = function (nPlayerNum, oRemoteReference, nCardWidth, sSessionId) {
+    var Player = function (nPlayerNum, oRemoteReference, nCardWidth, sSessionId, bIsRemote) {
 
         this.playerNum = nPlayerNum;
         this.remoteReference = oRemoteReference || null;
         this.cardWidth = nCardWidth;
         this.sessionId = sSessionId;
+        this.isRemote = bIsRemote;
 
         this.name = '';
         this.hand = [];
@@ -53,6 +54,14 @@ define('Player', ['Tools'], function (Tools) {
 
     Player.prototype.setSessionId = function (sSessionId) {
         this.sessionId = sSessionId;
+    };
+
+    Player.prototype.isRemote = function () {
+        return this.isRemote;
+    };
+
+    Player.prototype.setIsRemote = function (bIsRemote) {
+        this.isRemote = bIsRemote;
     };
 
     Player.prototype.getNumberCards = function () {
