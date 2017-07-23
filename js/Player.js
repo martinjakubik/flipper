@@ -205,7 +205,7 @@ define('Player', ['Tools'], function (Tools) {
             oCardView.addEventListener('animationend', this.finishedMovingToTableListener, false);
         }
 
-        oCardView.onclick = this.onTapTopCardInHand;
+        oCardView.onclick = this.onTapCardInHand;
 
         // sets the card's id as suit+value
         oCardView.setAttribute('id', 'card' + oCard.value + '-' + oCard.suit);
@@ -347,10 +347,10 @@ define('Player', ['Tools'], function (Tools) {
     };
 
     /**
-     *
+     * sets the function for tapping a a card that player wants to play
      */
-    Player.prototype.addOnTapToTopCardInHand = function (fnOnTap) {
-        this.onTapTopCardInHand = this.fanCards.bind(this);
+    Player.prototype.setOnTapCardInHand = function (fnOnTap) {
+        this.onTapCardInHand = this.fanCards.bind(this);
     };
 
     /**
