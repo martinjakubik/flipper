@@ -366,9 +366,14 @@ define('Player', ['Tools'], function (Tools) {
     /**
      * sets the function for tapping a a card that player wants to play
      */
-    Player.prototype.setOnTapCardInHand = function (fnOnTapPlayCard) {
+    Player.prototype.setOnTapCardInHand = function (fnOnTapPlayCard, bIsSplitHalf=false) {
         this.onTapPlayCard = fnOnTapPlayCard;
-        this.onTapCardInHand = fnTapCard.bind(this);
+
+        if (bIsSplitHalf) {
+            this.onTapCardInHand = fnTapCard.bind(this);
+        } else {
+            this.onTapCardInHand = fnOnTapPlayCard;
+        }
     };
 
     /**
