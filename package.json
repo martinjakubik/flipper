@@ -1,6 +1,6 @@
 {
   "name": "flook",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "flook flipper platform",
   "main": "index.js",
   "scripts": {
