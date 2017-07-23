@@ -347,10 +347,28 @@ define('Player', ['Tools'], function (Tools) {
     };
 
     /**
+     * decides what to do when a card is tapped depending on position of tap
+     */
+    var fnTapCard = function (oEvent) {
+        var oTarget = oEvent ? oEvent.currentTarget : null;
+        if (!oTarget) {
+            return;
+        }
+
+        var nPositionOnCard = oEvent.offsetY;
+        if (nPositionOnCard < 80) {
+            this.onTapPlayCard(oEvent);
+        } else {
+            this.fanCards.call(this, oEvent);
+        }
+    };
+
+    /**
      * sets the function for tapping a a card that player wants to play
      */
-    Player.prototype.setOnTapCardInHand = function (fnOnTap) {
-        this.onTapCardInHand = this.fanCards.bind(this);
+    Player.prototype.setOnTapCardInHand = function (fnOnTapPlayCard) {
+        this.onTapPlayCard = fnOnTapPlayCard;
+        this.onTapCardInHand = fnTapCard.bind(this);
     };
 
     /**
