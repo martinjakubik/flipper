@@ -132,7 +132,7 @@ define('Player', ['Tools'], function (Tools) {
             bStackCard = (i < nNumStackedCards && i !== this.table.length - 1);
             bShowCardFace = i % 2 === 0;
             bMoving = i === (this.table.length - 1);
-            this.addCardToView(oPlayerTableView, this.table[i], 0, true, bStackCard, bShowCardFace, bMoving);
+            this.addCardToView(oPlayerTableView, this.table[i], 0, this.table.length, bStackCard, bShowCardFace, bMoving);
         }
     };
 
@@ -169,25 +169,36 @@ define('Player', ['Tools'], function (Tools) {
 
         // redraws the whole hand
         for (i = 0; i < this.hand.length; i++) {
-            this.addCardToView(oPlayerHandView, this.hand[i], i, (i === this.hand.length - 1), bStackCard, bShowCardFace, bMoving);
+            this.addCardToView(oPlayerHandView, this.hand[i], i, this.hand.length, bStackCard, bShowCardFace, bMoving);
         }
     };
 
     /**
     * adds the given card to the given view
     */
-    Player.prototype.addCardToView = function (oView, oCard, nCardPosition, bLastCard, bStackCard, bShowCardFace, bMoving, fnOnTapUpdateGame) {
+    Player.prototype.addCardToView = function (oView, oCard, nCardPosition, nNumCards, bStackCard, bShowCardFace, bMoving, fnOnTapUpdateGame) {
 
-        var oCardView = document.createElement('div');
+        var oCardView = document.createElement('div'),
+            bLastCard = (nCardPosition == (nNumCards - 1)),
+            nZedIndex = nNumCards - nCardPosition + 1,
+            nLeftPosition = 90 + nCardPosition * 12;
 
         // decides if card should be shown as stacked to save space
         if (bStackCard) {
             Tools.setClass(oCardView, 'stackedCard');
-        } else if (nCardPosition < 1 || bLastCard) {
+            Tools.addStyle(oCardView, 'z-index', nZedIndex);
+            Tools.addStyle(oCardView, 'left', nLeftPosition + 'px');
+        } else if (nCardPosition < 1) {
             Tools.setClass(oCardView, 'card');
+        } else if (bLastCard) {
+            Tools.setClass(oCardView, 'stackedCard');
+            Tools.addStyle(oCardView, 'z-index', nZedIndex);
+            Tools.addStyle(oCardView, 'left', nLeftPosition + 'px');
         } else {
             Tools.setClass(oCardView, 'card');
             Tools.addClass(oCardView, 'stackedCard');
+            Tools.addStyle(oCardView, 'z-index', nZedIndex);
+            Tools.addStyle(oCardView, 'left', nLeftPosition + 'px');
         }
 
         // sets the card to show back or face

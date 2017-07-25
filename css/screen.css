@@ -38,10 +38,10 @@ body {
 }
 
 .hand {
+    position: relative;
     margin-left: 224pt;
     display: inline-block;
     vertical-align: middle;
-    overflow-x: hidden;
 }
 
 .name {
@@ -130,14 +130,7 @@ body {
 }
 
 .stackedCard {
-    margin: 0 0 0 2pt;
-    width: 6pt;
-
-    border-left: none;
-
-    background-position: -96px;
-
-    transition: width .1s;
+    position: absolute;
 }
 
 .card>.content {
@@ -152,9 +145,6 @@ body {
 }
 
 .fannedCard {
-    top: -10pt;
-    position: relative;
-
     margin: 0 0 0 2pt;
     width: 74pt;
 
